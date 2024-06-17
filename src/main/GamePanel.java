@@ -34,6 +34,7 @@ public class GamePanel extends JPanel implements Runnable {
 	Sound soundEffect = new Sound();
 	public AssetsSetter aSetter = new AssetsSetter(this);
 	public CollisionChecker cChecker = new CollisionChecker(this);
+	public UI ui = new UI(this);
 
 	// Entity and Objects
 	public Player player = new Player(this, keyHandler);
@@ -97,7 +98,7 @@ public class GamePanel extends JPanel implements Runnable {
 		super.paintComponent(g);
 
 		Graphics2D graphics2d = (Graphics2D) g;
-
+		// TILE
 		tileManager.draw(graphics2d);
 
 		for (int i = 0; i < obj.length; i++) {
@@ -105,8 +106,10 @@ public class GamePanel extends JPanel implements Runnable {
 				obj[i].draw(graphics2d, this);
 			}
 		}
-
+		// PLAYER
 		player.draw(graphics2d);
+		// UI
+		ui.draw(graphics2d);
 
 		graphics2d.dispose();
 	}

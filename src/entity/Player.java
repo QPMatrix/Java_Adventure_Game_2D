@@ -15,7 +15,7 @@ public class Player extends Entity {
 	KeyHandler keyHandler;
 	public final int screenX;
 	public final int screenY;
-	int hasKeys = 0;
+	public int hasKeys = 0;
 
 	public Player(GamePanel gp, KeyHandler keyHandler) {
 		this.gp = gp;
@@ -116,18 +116,28 @@ public class Player extends Entity {
 				gp.playSE(1);
 				hasKeys++;
 				gp.obj[idx] = null;
+				gp.ui.toast("You got a key!");
 				break;
 			case "Door":
 				if (hasKeys > 0) {
 					gp.playSE(3);
 					gp.obj[idx] = null;
 					hasKeys--;
+					gp.ui.toast("Door opened!");
+				}else {
+					gp.ui.toast("You need a key!");
 				}
 				break;
 			case "Boots":
 				gp.playSE(2);
 				speed += 1;
 				gp.obj[idx] = null;
+				gp.ui.toast("Speed UP!");
+				break;
+			case "Chest":
+				gp.ui.ChapterFisnhed = true;
+				gp.stopMusic();
+				gp.playSE(4);
 				break;
 			}
 		}
