@@ -8,10 +8,11 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 import entity.Player;
-import objects.SuperObjects;
+import objects.Objects;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
+	// Screen Settings
 	final int originalTileSize = 16; // ?16x16 tile
 	final int scale = 3;
 	public final int tileSize = originalTileSize * scale; // ?48x48 tile
@@ -19,21 +20,24 @@ public class GamePanel extends JPanel implements Runnable {
 	public final int maxScreenRow = 12;
 	public final int screenWidth = tileSize * maxScreenCol; // ?768 pixels
 	public final int screenHeight = tileSize * maxScreenRow; // ?576 pixels
+	// World Settings
 	public final int maxWorldCol = 50;
 	public final int maxWorldRow = 50;
-	public final int worldWidth = tileSize * maxWorldCol;
-	public final int worldHeight = tileSize * maxWorldRow;
+
+	// FPS
 	int FPS = 90;
+	// System
 	TileManager tileManager = new TileManager(this);
 	KeyHandler keyHandler = new KeyHandler();
 	Thread gameThread;
-	
-	
-	public CollisionChecker cChecker = new CollisionChecker(this);
-	public Player player = new Player(this, keyHandler);
-	public SuperObjects obj[] = new SuperObjects[10];
+	Sound sound = new Sound();
 	public AssetsSetter aSetter = new AssetsSetter(this);
-	
+	public CollisionChecker cChecker = new CollisionChecker(this);
+
+	// Entity and Objects
+	public Player player = new Player(this, keyHandler);
+	public Objects obj[] = new Objects[10];
+
 	int PlayerX = 100;
 	int PlayerY = 100;
 	int PlayerSpeed = 4;
@@ -45,10 +49,10 @@ public class GamePanel extends JPanel implements Runnable {
 		this.addKeyListener(keyHandler);
 		this.setFocusable(true);
 	}
-	
-	
+
 	public void setUpGame() {
 		aSetter.setObjects();
+		playMusic(0);
 	}
 
 	public void startGameThread() {
@@ -90,19 +94,35 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
+
 		Graphics2D graphics2d = (Graphics2D) g;
-		
+
 		tileManager.draw(graphics2d);
-		
-		for(int i =0; i < obj.length; i++) {
-			if(obj[i] != null) {
+
+		for (int i = 0; i < obj.length; i++) {
+			if (obj[i] != null) {
 				obj[i].draw(graphics2d, this);
 			}
 		}
-		
+
 		player.draw(graphics2d);
 
 		graphics2d.dispose();
+	}
+
+	public void playMusic(int idx) {
+		sound.setFile(idx);
+		sound.play();
+		sound.loop();
+	}
+
+	public void stopMusic() {
+		sound.stop();
+	}
+
+	// Play sound Effect
+	public void playSE(int idx) {
+		sound.setFile(idx);
+		sound.play();
 	}
 }

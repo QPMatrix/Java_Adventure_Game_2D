@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Door extends SuperObjects{
+public class Door extends Objects{
 	public Door() {
 		name = "Door";
 		try {
