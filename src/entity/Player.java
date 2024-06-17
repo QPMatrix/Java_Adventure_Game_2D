@@ -15,17 +15,22 @@ public class Player extends Entity {
     KeyHandler keyHandler;
     public final int screenX;
     public final int screenY;
-    
+    int hasKeys = 0;
     public Player(GamePanel gp , KeyHandler keyHandler){
         this.gp = gp;
         this.keyHandler = keyHandler;
+        
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
         screenY = gp.screenHeight/2 - (gp.tileSize/2);
+        
         solidArea = new Rectangle();
         solidArea.x = 8;
         solidArea.y = 16;
-        solidArea.width = 32;
-        solidArea.height =32;
+        solidArea.width = 30;
+        solidArea.height =30;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
+        
         setDefaultValues();
         getPlayerImage();
     }
@@ -66,9 +71,12 @@ public class Player extends Entity {
     	        }else if(keyHandler.rightPressed){
     	            direction = "right"; 
     	        }
-    		 
+    		 	//Check tile collision
     		 	collisionOn = false;
     		 	gp.cChecker.checkTile(this);
+    		 	//Check Object Collision
+    		 	int objIdx = gp.cChecker.checkObject(this, true);
+    		 	pickUpObject(objIdx);
     		 	
     		 	if(!collisionOn) {
     		 		switch(direction) {
@@ -92,6 +100,23 @@ public class Player extends Entity {
     	        }
     	}
        
+    }
+    public void  pickUpObject(int idx) {
+    	if(idx != 999) {
+    		String objName = gp.obj[idx].name;
+    		switch(objName) {
+    		case "Key":
+    			hasKeys++;
+    			gp.obj[idx]=null;
+    			break;
+    		case "Door":
+    			if(hasKeys > 0) {
+    				gp.obj[idx] = null;
+    				hasKeys--;
+    			}
+    		}
+    	}
+    	
     }
     public void draw( Graphics2D graphics2d){
         BufferedImage image = null;

@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class OBJ_Key extends SuperObjects {
-	public OBJ_Key() {
+public class Key extends SuperObjects {
+	public Key() {
 		name = "Key";
 		try {
 			image = ImageIO.read(getClass().getResourceAsStream("/objects/key.png"));
